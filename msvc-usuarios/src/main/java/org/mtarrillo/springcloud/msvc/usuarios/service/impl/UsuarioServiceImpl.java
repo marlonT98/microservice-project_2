@@ -39,6 +39,5 @@ public class UsuarioServiceImpl  implements UsuarioService {
     public void delete(Long id) {
 
         repository.deleteById(id);
-
     }
 }
