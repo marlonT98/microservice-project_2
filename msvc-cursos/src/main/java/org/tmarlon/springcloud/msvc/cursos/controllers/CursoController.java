@@ -1,13 +1,17 @@
 package org.tmarlon.springcloud.msvc.cursos.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.tmarlon.springcloud.msvc.cursos.entity.Curso;
 import org.tmarlon.springcloud.msvc.cursos.service.CursoService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -39,7 +43,11 @@ public class CursoController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> crear(@RequestBody Curso curso) {
+    public ResponseEntity<?> crear(@Valid @RequestBody Curso curso , BindingResult bindingResult) {
+
+        if ( bindingResult.hasErrors() ){
+            return  validar( bindingResult);
+        }
 
         Curso cursoDb = service.save(curso);
         return ResponseEntity.status(HttpStatus.CREATED).body(cursoDb);
@@ -48,7 +56,11 @@ public class CursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@RequestBody Curso curso, @PathVariable Long id) {
+    public ResponseEntity<?> editar( @Valid @RequestBody Curso curso,BindingResult bindingResult , @PathVariable Long id) {
+
+        if ( bindingResult.hasErrors() ){
+            return  validar( bindingResult);
+        }
 
         //buscamos el curso a modificar
         Optional<Curso> cursoOptional = service.findById(id);
@@ -77,6 +89,16 @@ public class CursoController {
 
         return ResponseEntity.notFound().build();
     }
+    //metodo para validar
+    private static ResponseEntity<Map<String, String>> validar(BindingResult result) {
+        Map< String , String> errores = new HashMap<>();
+        result.getFieldErrors().forEach(err ->{
+            errores.put( err.getField() , "El campo "+err.getField()+" "+err.getDefaultMessage() );
+        } );
+        return ResponseEntity.badRequest().body(errores);
+    }
+
+
 
 
 }

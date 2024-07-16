@@ -1,13 +1,18 @@
 package org.mtarrillo.springcloud.msvc.usuarios.controller;
 
+import jakarta.validation.Valid;
 import org.mtarrillo.springcloud.msvc.usuarios.models.entity.Usuario;
 import org.mtarrillo.springcloud.msvc.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -36,14 +41,25 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?>  save( @RequestBody Usuario usuario  ){
+    public ResponseEntity<?>  save(@Valid @RequestBody Usuario usuario, BindingResult result){
+        //validando
+        if ( result.hasErrors() ){
+            return validar(result);
+        }
 
       return   ResponseEntity.status(HttpStatus.CREATED ).body(service.save( usuario));
 
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> update( @RequestBody Usuario usuario , @PathVariable Long id  ){
+    public ResponseEntity<?> update( @Valid @RequestBody Usuario usuario ,BindingResult result , @PathVariable Long id  ){
+
+        //validando
+        if ( result.hasErrors() ){
+            return validar(result);
+        }
+
 
         //busacamos a la base de datos
         Optional<Usuario> usuarioOptional =   service.findById(id);
@@ -80,6 +96,14 @@ public class UsuarioController {
 
     }
 
+    //metodo para validar
+    private static ResponseEntity<Map<String, String>> validar(BindingResult result) {
+        Map< String , String> errores = new HashMap<>();
+        result.getFieldErrors().forEach(err ->{
+            errores.put( err.getField() , "El campo "+err.getField()+" "+err.getDefaultMessage() );
+        } );
+        return ResponseEntity.badRequest().body(errores);
+    }
 
 
 
