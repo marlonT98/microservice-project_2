@@ -10,10 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class UsuarioController {
@@ -42,6 +39,17 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<?>  save(@Valid @RequestBody Usuario usuario, BindingResult result){
+
+        //si existe ese email ya hay un usuario con ese correo
+        if (service.findEmail( usuario.getEmail() ).isPresent()){
+
+            return ResponseEntity.badRequest().body(Collections.singletonMap(
+                    "error ", "Ya existe un usuario con ese email" )
+            );
+
+
+        }
+
         //validando
         if ( result.hasErrors() ){
             return validar(result);
@@ -55,6 +63,8 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update( @Valid @RequestBody Usuario usuario ,BindingResult result , @PathVariable Long id  ){
 
+
+
         //validando
         if ( result.hasErrors() ){
             return validar(result);
@@ -66,6 +76,18 @@ public class UsuarioController {
         //modificamos con los datos que nos estan enviando
         if ( usuarioOptional.isPresent()){
             Usuario usuarioDb = usuarioOptional.get();//usuario de la bdd
+
+            //si es diferente  de la bdd con el usuario pasado es para modificar , entonces buscamos en la bbd
+            //que no sea igual a un usuario de ahi.
+            if (!usuario.getEmail().equalsIgnoreCase(usuarioDb.getEmail()) && service.findEmail( usuario.getEmail() ).isPresent()){
+
+                return ResponseEntity.badRequest().body(Collections.singletonMap(
+                        "error ", "Ya existe un usuario con ese email" )
+                );
+
+
+            }
+
 
             usuarioDb.setNombre( usuario.getNombre() );
             usuarioDb.setEmail( usuario.getEmail() );
