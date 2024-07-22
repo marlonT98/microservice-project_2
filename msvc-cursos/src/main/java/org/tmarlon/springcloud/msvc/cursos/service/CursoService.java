@@ -1,6 +1,6 @@
 package org.tmarlon.springcloud.msvc.cursos.service;
 
-import org.tmarlon.springcloud.msvc.cursos.entity.Curso;
+import org.tmarlon.springcloud.msvc.cursos.models.entity.Curso;
 
 import java.util.List;
 import java.util.Optional;

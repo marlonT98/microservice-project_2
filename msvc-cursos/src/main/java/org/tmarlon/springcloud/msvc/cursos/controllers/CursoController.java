@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.tmarlon.springcloud.msvc.cursos.entity.Curso;
+import org.tmarlon.springcloud.msvc.cursos.models.entity.Curso;
 import org.tmarlon.springcloud.msvc.cursos.service.CursoService;
 
 import java.util.HashMap;

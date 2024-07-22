@@ -1,12 +1,11 @@
-package org.tmarlon.springcloud.msvc.cursos.entity;
+package org.tmarlon.springcloud.msvc.cursos.models.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import org.tmarlon.springcloud.msvc.cursos.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "cursos")
@@ -21,11 +20,19 @@ public class Curso {
 
     //un solo curso puede tener muchos usuarios
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "curso_id")
     private List<CursoUsuario> cursoUsuarios;
+
+    //es un atributo que no estara mapeada en la tabla
+    //es solo un campo para poder poblar los datos de los usuarios completos
+    @Transient
+    private List<Usuario> usuarios;
+
 
     //creamos un instancia para cursos_usuarios gracias a un constructor vacio
     public Curso() {
         cursoUsuarios= new ArrayList<>();
+        usuarios = new ArrayList<>();
     }
 
 
@@ -69,7 +76,12 @@ public class Curso {
 
     }
 
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
 
-
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
 
 }

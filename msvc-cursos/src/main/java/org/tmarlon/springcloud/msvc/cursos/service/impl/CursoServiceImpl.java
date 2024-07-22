@@ -3,7 +3,7 @@ package org.tmarlon.springcloud.msvc.cursos.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tmarlon.springcloud.msvc.cursos.entity.Curso;
+import org.tmarlon.springcloud.msvc.cursos.models.entity.Curso;
 import org.tmarlon.springcloud.msvc.cursos.repository.CursoRepository;
 import org.tmarlon.springcloud.msvc.cursos.service.CursoService;
 

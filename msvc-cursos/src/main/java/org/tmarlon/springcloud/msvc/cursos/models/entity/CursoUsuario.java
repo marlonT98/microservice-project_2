@@ -1,4 +1,4 @@
-package org.tmarlon.springcloud.msvc.cursos.entity;
+package org.tmarlon.springcloud.msvc.cursos.models.entity;
 
 
 import jakarta.persistence.*;
