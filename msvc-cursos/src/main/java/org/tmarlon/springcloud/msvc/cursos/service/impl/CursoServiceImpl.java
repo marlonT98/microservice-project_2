@@ -3,6 +3,7 @@ package org.tmarlon.springcloud.msvc.cursos.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tmarlon.springcloud.msvc.cursos.models.Usuario;
 import org.tmarlon.springcloud.msvc.cursos.models.entity.Curso;
 import org.tmarlon.springcloud.msvc.cursos.repository.CursoRepository;
 import org.tmarlon.springcloud.msvc.cursos.service.CursoService;
@@ -41,5 +42,20 @@ public class CursoServiceImpl implements CursoService {
 
         repository.deleteById( id);
 
+    }
+
+    @Override
+    public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> crearUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
     }
 }
